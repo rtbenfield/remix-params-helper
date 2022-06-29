@@ -1,5 +1,5 @@
 {
-  "name": "remix-params-helper",
+  "name": "@rtbenfield/remix-params-helper",
   "version": "0.4.10",
   "description": "This package makes it simple to use Zod with standard URLSearchParams and FormData which are typically used in Remix apps.",
   "browser": "/dist/helper.js",
@@ -17,13 +17,13 @@
     "prepublish": "npm run build"
   },
   "author": {
-    "name": "Kiliman",
-    "email": "kiliman@gmail.com",
-    "url": "https://kiliman.dev"
+    "name": "Tyler Benfield",
+    "email": "tyler@tylerbenfield.me",
+    "url": "https://tylerbenfield.me"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kiliman/remix-params-helper.git"
+    "url": "https://github.com/rtbenfield/remix-params-helper.git"
   },
   "keywords": [
     "remix",
