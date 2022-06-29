@@ -555,3 +555,52 @@ describe('array values', () => {
     expect(foo).toStrictEqual([1])
   })
 })
+
+describe('union', () => {
+  it('should parse union', () => {
+    const schema = z.union([
+      z.object({ foo: z.number() }),
+      z.object({ bar: z.string() }),
+    ])
+
+    const formDataFoo = new FormData()
+    formDataFoo.append('foo', '1')
+
+    const resultFoo = getParams(formDataFoo, schema)
+    expect(resultFoo.success).toBe(true)
+    expect(resultFoo.data).toStrictEqual({ foo: 1 })
+
+    const formDataBar = new FormData()
+    formDataBar.append('bar', 'some string value')
+
+    const resultBar = getParams(formDataBar, schema)
+    expect(resultBar.success).toBe(true)
+    expect(resultBar.data).toStrictEqual({ bar: 'some string value' })
+  })
+
+  it('should parse deep union', () => {
+    const schema = z.union([
+      z.object({ foo: z.number() }),
+      z.object({
+        bar: z.union([
+          z.object({ a: z.string() }),
+          z.object({ b: z.string() }),
+        ]),
+      }),
+    ])
+
+    const formDataA = new FormData()
+    formDataA.append('bar.a', 'some string value')
+
+    const resultA = getParams(formDataA, schema)
+    expect(resultA.success).toBe(true)
+    expect(resultA.data).toStrictEqual({ bar: { a: 'some string value' } })
+
+    const formDataB = new FormData()
+    formDataB.append('bar.b', 'some string value')
+
+    const resultB = getParams(formDataB, schema)
+    expect(resultB.success).toBe(true)
+    expect(resultB.data).toStrictEqual({ bar: { b: 'some string value' } })
+  })
+})

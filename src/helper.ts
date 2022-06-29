@@ -14,6 +14,7 @@ import {
   ZodString,
   ZodType,
   ZodTypeAny,
+  ZodUnion,
 } from 'zod'
 
 function isIterable(
@@ -37,10 +38,19 @@ function parseParams(o: any, schema: any, key: string, value: any) {
     }
   }
 
+  if (shape instanceof ZodUnion) {
+    for (const option of shape.options) {
+      parseParams(o, option, key, value)
+    }
+    return
+  }
+
   if (key.includes('.')) {
     let [parentProp, ...rest] = key.split('.')
     o[parentProp] = o[parentProp] ?? {}
-    parseParams(o[parentProp], shape[parentProp], rest.join('.'), value)
+    if (parentProp in shape) {
+      parseParams(o[parentProp], shape[parentProp], rest.join('.'), value)
+    }
     return
   }
   let isArray = false
